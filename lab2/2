@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ps x -Ao pid,command | awk '$2 ~ /^\/sbin\// {print $1}' 
+

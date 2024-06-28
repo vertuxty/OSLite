@@ -1,0 +1,39 @@
+#!/bin/bash
+path="info2"
+> $path/mem.log
+> $path/swap.log
+# > $path/script.log
+> $path/other.log
+> $path/time.log
+> $path/usedMem.log
+> $path/usedSwap.log
+> $path/avalMem.log
+> $path/buffCache.log
+pid_proc=$(pgrep "mem[2]*.bash")
+echo $pid_proc 
+while [[ true ]]
+do
+    top -b -n 1 > tmptable
+    memstr=$(top -b -n 1 | grep "mem[2]*.bash")
+    if [[ -z $memstr ]]
+    then
+        break
+        rm tmptable
+    fi
+    echo $memstr | awk '{printf "%s %s %s %s\n", $5, $9, $10, $11}' >> $path/script.log
+    echo $memstr | awk '{printf "%s\n", $11}' >> $path/time.log
+    echo $(cat tmptable | grep "MiB Mem" | awk '{gsub(",", ".");printf "%s", $6}') >> $path/mem.log
+    echo $(cat tmptable | grep "MiB Swap" | awk '{gsub(",", ".");printf "%s", $5}') >> $path/swap.log
+    echo $(cat tmptable | grep "MiB Swap" | awk '{gsub(",", ".");printf "%s", $7}') >> $path/usedSwap.log
+    echo $(cat tmptable | grep "MiB Swap" | awk '{gsub(",", ".");printf "%s", $9}') >> $path/avalMem.log
+    echo $(cat tmptable | grep "MiB Mem" | awk '{gsub(",", ".");printf "%s", $8}') >> $path/usedMem.log
+    echo $(cat tmptable | grep "MiB Mem" | awk '{gsub(",", ".");printf "%s", $10}') >> $path/buffCache.log
+
+    echo "$(cat tmptable | awk '{printf "%s\n", $0}' | head -n 5 | tail -n 2)" >> $path/other.log
+    echo "$(cat tmptable | awk '{printf "%s\n", $0}' | head -n 12 | tail -n 5)" >> $path/other.log
+    echo " " >> $path/other.log
+    sleep 1s
+done
+
+sudo dmesg | grep "mem.bash" | tail -n 2
+cat report.log | tail -n 1

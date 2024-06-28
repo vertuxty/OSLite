@@ -1,0 +1,17 @@
+#!/bin/bash
+
+>task4.txt
+
+#Первый варинат обхода в цикле:
+for i in $(ps -ax -o pid --no-header | uniq)
+do
+  pid=$i
+  ppid=$(cat /proc/${i}/status | awk '"PPid:"==$1 {print $2}')
+  execTime=$(cat /proc/${i}/sched | awk '"se.sum_exec_runtime"==$1 {print $3}')
+  nrSwitches=$(cat /proc/${i}/sched | awk '"nr_switches"==$1 {print $3}')
+  ARTMeme=$(echo $execTime $nrSwitches | awk '{s=$1/$2} END {print s}')
+  echo "Process_ID=""${i}"" : Parent_Process_ID=""${ppid}"" : ""Average_runnong_time=""${ARTMeme}" >> task4.txt
+done
+
+cat task4.txt | awk '{print $0}' | sort -Vk3 | uniq > sortTask4.txt
+

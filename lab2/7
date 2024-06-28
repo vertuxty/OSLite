@@ -1,0 +1,37 @@
+#!/bin/bash
+
+STIME=$SECONDS
+
+>tmp7.txt
+>tmp7.2.txt
+
+for i in $(ps -a -N -o pid --no-header)
+do
+  bytes=$(cat /proc/${i}/io | awk '$1=="read_bytes:" {print $2}')
+  echo $i $bytes >> tmp7.txt
+done
+
+let DIFFTIME=$SECONDS-$STIME
+sleep $((60 - $DIFFTIME))s
+
+for i in $(ps -a -x -o pid --no-header)
+do
+  bytes_old=$(cat tmp7.txt | awk -v tmp="$i" '$1==tmp {print $2}')
+  bytes_new=$(cat /proc/${i}/io | awk '$1=="read_bytes:" {print $2}')
+  let diffbytes=$(echo $bytes_new $bytes_old | awk '{print $1 - $2}')
+  cmdCommand=$(cat /proc/${i}/cmdline)
+  echo $i":"$cmdCommand":"$diffbytes >> tmp7.2.txt
+done
+
+cat tmp7.2.txt | sort -t : -nrk3 | head -n 3 
+
+
+
+
+
+
+
+ 
+
+
+

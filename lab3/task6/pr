@@ -1,0 +1,52 @@
+#!/bin/bash
+
+echo $$ > .pidTask6
+MODE="ADD"
+value=1
+usr1()
+{
+	MODE="ADD"
+}
+trap 'usr1' USR1
+usr2()
+{
+	MODE="MULT"
+}
+trap 'usr2' USR2
+sigterm()
+{
+	MODE="SIGTERM"
+}
+trap 'sigterm' SIGTERM
+sigrtmin2()
+{
+	MODE="DIV"
+}
+trap 'sigrtmin2' SIGRTMIN+2
+sigrtmax2()
+{
+	MODE="SUB"
+}
+trap 'sigrtmax2' SIGRTMAX+2
+while true
+do
+	case $MODE in
+		"ADD")
+			((value+=2))
+			;;		
+		"MULT")	
+			((value*=2))
+			;;
+		"DIV")
+			((value/=2))
+			;;
+		"SUB")
+			((value-=2))
+			;;
+		"SIGTERM")
+			echo "Scrpit stopped by command"
+			exit 0
+	esac
+	echo $value
+	sleep 1s
+done

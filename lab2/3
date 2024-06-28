@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ps -a -x -o pid,stime --sort=-stime --no-header | head -n 1 | awk '{print $1}' 

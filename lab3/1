@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkdir $HOME/test && echo "catalog test was created successfully" > ~/report && touch $HOME/test/$(date '+%d-%m-%Y %H-%M-%S') 
+
+ping www.net_nikogo.net || echo $(date '+%d-%m-%Y %H-%M-%S') "Error, can't ping to site. Try again." >> ~/report 
+
+# && - при успешном завершении первой команды, выполняется последующая.
+# || - выполнение команды при неудачном завершении предыдущей.

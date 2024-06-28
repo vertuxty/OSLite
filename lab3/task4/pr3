@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo $$ > .pid3
+
+sum=1
+while true
+do
+    ((sum+=2))
+done
+

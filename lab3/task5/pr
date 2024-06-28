@@ -1,0 +1,41 @@
+#!/bin/bash
+
+value=1
+status="ADD"
+regex_num="^-?[0-9]+"
+(tail -f pipe) | 
+while true; do
+	read LINE;
+	case "$LINE" in
+		"QUIT")
+			echo "Normal exit"
+			kill $(cat .pidTask5)
+			rm .pidTask5
+			killall tail
+			echo $value
+			exit 0
+			;;
+		"+")
+			status="ADD"
+			;;
+		"*")
+			status="MULT"
+			;;
+		*)
+			if [[ $LINE =~ $regex_num ]]; then
+				if [[ $status == "ADD" ]]; then
+					((value+=$LINE))
+				else
+					((value*=$LINE))
+				fi
+			else
+				echo "Error invalid input"
+				kill $(cat .pidTask5)
+				rm .pidTask5
+				killall tail
+				echo $value
+				exit 1
+			fi			
+			;;
+	esac
+done

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ps aux | awk '$1=="vertuxty" {print $0}'| wc -l > taskA.txt
+ps aux | awk '$1="vertuxty" {print $2,":",$11}' >> taskA.txt
+ 

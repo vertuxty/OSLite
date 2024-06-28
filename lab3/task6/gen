@@ -1,0 +1,28 @@
+#!/bin/bash
+
+LINE=""
+while true
+do
+	read LINE
+	case "$LINE" in
+		"+")
+			kill -USR1 $(cat .pidTask6)
+			;;
+		"*")
+			kill -USR2 $(cat .pidTask6)
+			;;
+		"/")	kill -SIGRTMIN+2 $(cat .pidTask6)
+			;;
+		"-")	kill -SIGRTMAX-2 $(cat .pidTask6)
+			;;
+		"TERM")
+			kill -SIGTERM $(cat .pidTask6)
+			kill $(cat .pidTask6)
+			rm .pidTask6
+			exit 0
+			;;
+		*)
+			:
+			;;
+	esac
+done

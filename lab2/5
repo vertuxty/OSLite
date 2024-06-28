@@ -1,0 +1,16 @@
+#!/bin/bash
+
+FILE="sortTask4.txt"
+>task5.txt
+pairs=$(cat $FILE | awk '{print $3}' | uniq -c | awk '{print $1":"$2}')
+for i in $pairs
+do
+  sum2=0
+  count=$(echo $i | awk -F ":" '{print $1}')
+  ppid=$(echo $i | awk -F ":" '{print $2}')
+  sum=$(cat $FILE | awk -v tmp="$ppid" '$3==tmp {s+=substr($5,22)} END {print s}')
+  M=$(echo $sum $count | awk '{print $1/$2}')
+  numPPid=$(echo $ppid | awk -v tmp="$ppid" '{print substr(tmp,19)}')
+  cat $FILE | awk -v tmp="$ppid" '$3==tmp {print $0}' >> task5.txt
+  echo "Average_running_Childre_of_ParentID="$numPPid "is" $M >> task5.txt
+done

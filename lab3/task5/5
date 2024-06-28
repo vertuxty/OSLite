@@ -1,0 +1,8 @@
+#!/bin/bash
+
+mkfifo pipe
+
+./pr & 
+./gen
+
+rm pipe

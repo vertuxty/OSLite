@@ -1,0 +1,10 @@
+#!/bin/bash
+
+>task6help.txt
+for pid in $(ps -ax -o pid --no-header)
+do
+  i=$(cat /proc/${pid}/status | awk '$1=="VmSize:" {print $2}')
+  echo "${pid}"" ""$i"
+done >> task6help.txt
+
+cat task6help.txt | sort -nrk2 | head -n 1 | awk '{print $1" "$2}'

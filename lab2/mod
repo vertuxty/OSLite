@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in $(ps -ax -o pid --no-header)
+do
+    link=$(readlink /proc/${i}/exe)
+    echo $i $link
+done

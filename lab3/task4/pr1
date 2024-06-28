@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo $$ > .pid1
+
+sum=1
+while true 
+do
+    ((sum+=2))
+done

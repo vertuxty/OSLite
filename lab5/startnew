@@ -1,0 +1,18 @@
+#!/bin/bash
+# N=21300000
+# N=7100000
+# 18600000
+N=18262500
+K=30
+echo "N="$N " " "K="$K
+# I=0
+# while sleep 1
+for (( i=0; i < $K; i++ ));
+do
+    # if [[ $I -gt $K ]]
+    # then
+        # exit 0
+    # fi
+    ./newmem.bash $N &
+    sleep 1
+done
